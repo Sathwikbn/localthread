@@ -1,0 +1,46 @@
+:root {
+  /* Colors */
+  --color-bg: #FAF9F6;
+  --color-surface: #ffffff;
+  --color-border: rgba(194, 65, 12, 0.1);
+  --color-text: #0F172A;
+  --color-text-muted: #64748b;
+  --color-primary: #0F172A;
+  --color-primary-hover: #020617;
+  --color-accent: #C2410C;
+  --color-accent-hover: #9a3412;
+  --color-danger: #ef4444;
+  --color-success: #10b981;
+
+  /* Typography */
+  --font-sans: 'Outfit', 'Manrope', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 3rem;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Shapes */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.02);
+  --shadow-md: 0 8px 30px rgba(194, 65, 12, 0.04);
+  --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.06);
+}

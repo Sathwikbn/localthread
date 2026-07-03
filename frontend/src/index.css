@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────
+   LOCALTHREAD — WARM MINIMALIST DESIGN SYSTEM
+   Palette: Cream · Charcoal · Amber-Copper
+   Fonts:   Outfit (display) · Manrope (body)
+───────────────────────────────────────────────────────── */
+
+@layer base {
+  :root {
+    /* ── Backgrounds ── */
+    --background:          40 33% 97%;    /* #FAF9F6 warm cream */
+    --foreground:          222 47% 9%;    /* #0F172A deep charcoal */
+
+    /* ── Cards & Surfaces ── */
+    --card:                0 0% 100%;     /* #FFFFFF pure white */
+    --card-foreground:     222 47% 9%;
+
+    /* ── Popover ── */
+    --popover:             0 0% 100%;
+    --popover-foreground:  222 47% 9%;
+
+    /* ── Primary — Deep Charcoal ── */
+    --primary:             222 47% 9%;    /* #0F172A */
+    --primary-foreground:  40 33% 97%;
+
+    /* ── Secondary — Warm Stone ── */
+    --secondary:           36 20% 93%;   /* warm grey-beige */
+    --secondary-foreground: 222 47% 9%;
+
+    /* ── Muted ── */
+    --muted:               36 20% 93%;
+    --muted-foreground:    215 16% 47%;  /* slate-500 */
+
+    /* ── Accent — Amber Copper ── */
+    --accent:              22 91% 41%;   /* #C2410C amber-copper */
+    --accent-foreground:   0 0% 100%;
+
+    /* ── Destructive ── */
+    --destructive:         0 84% 60%;
+    --destructive-foreground: 40 33% 97%;
+
+    /* ── Borders & Inputs ── */
+    --border:              36 20% 88%;   /* warm border */
+    --input:               36 20% 88%;
+    --ring:                22 91% 41%;   /* amber focus ring */
+
+    /* ── Border Radius ── */
+    --radius:              0.75rem;
+
+    /* ── Custom LocalThread Tokens ── */
+    --lt-cream:            #FAF9F6;
+    --lt-cream-dark:       #F0EDE5;
+    --lt-charcoal:         #0F172A;
+    --lt-amber:            #C2410C;
+    --lt-amber-light:      #FED7AA;
+    --lt-amber-pale:       #FFF7ED;
+    --lt-border:           #E8E4DC;
+    --lt-muted:            #64748B;
+    --lt-shadow-sm:        0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+    --lt-shadow-md:        0 4px 12px rgba(15,23,42,0.08), 0 2px 4px rgba(15,23,42,0.04);
+    --lt-shadow-lg:        0 16px 40px rgba(15,23,42,0.10), 0 4px 12px rgba(15,23,42,0.06);
+    --lt-shadow-hover:     0 20px 48px rgba(15,23,42,0.14), 0 6px 16px rgba(15,23,42,0.08);
+    --lt-font-display:     'Outfit', system-ui, sans-serif;
+    --lt-font-body:        'Manrope', system-ui, sans-serif;
+  }
+
+  .dark {
+    --background:          222 47% 9%;
+    --foreground:          40 33% 97%;
+    --card:                222 47% 12%;
+    --card-foreground:     40 33% 97%;
+    --popover:             222 47% 12%;
+    --popover-foreground:  40 33% 97%;
+    --primary:             40 33% 97%;
+    --primary-foreground:  222 47% 9%;
+    --secondary:           217 33% 17%;
+    --secondary-foreground: 40 33% 97%;
+    --muted:               217 33% 17%;
+    --muted-foreground:    215 20% 65%;
+    --accent:              22 91% 55%;
+    --accent-foreground:   0 0% 100%;
+    --destructive:         0 63% 31%;
+    --destructive-foreground: 40 33% 97%;
+    --border:              217 33% 20%;
+    --input:               217 33% 20%;
+    --ring:                22 91% 55%;
+
+    /* Custom LocalThread Tokens for Dark Mode */
+    --lt-cream:            #0F172A;
+    --lt-cream-dark:       #1E293B;
+    --lt-charcoal:         #FAF9F6;
+    --lt-amber:            #F97316;
+    --lt-amber-light:      #431407;
+    --lt-amber-pale:       #1C1917;
+    --lt-border:           #334155;
+    --lt-muted:            #94A3B8;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--lt-font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--lt-font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   GLOBAL UTILITY CLASSES
+───────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Typography */
+  .font-display  { font-family: var(--lt-font-display); }
+  .font-body     { font-family: var(--lt-font-body); }
+
+  /* Amber accent text */
+  .text-amber    { color: var(--lt-amber); }
+
+  /* Cream surface */
+  .bg-cream      { background-color: var(--lt-cream); }
+  .bg-cream-dark { background-color: var(--lt-cream-dark); }
+  .bg-amber-pale { background-color: var(--lt-amber-pale); }
+
+  /* Shadows */
+  .shadow-lt-sm    { box-shadow: var(--lt-shadow-sm); }
+  .shadow-lt-md    { box-shadow: var(--lt-shadow-md); }
+  .shadow-lt-lg    { box-shadow: var(--lt-shadow-lg); }
+  .shadow-lt-hover { box-shadow: var(--lt-shadow-hover); }
+
+  /* Smooth card lift on hover */
+  .card-lift {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--lt-shadow-hover);
+  }
+
+  /* Distance badge pill */
+  .distance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--lt-amber-pale);
+    color: var(--lt-amber);
+    border: 1px solid var(--lt-amber-light);
+    border-radius: 9999px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--lt-font-display);
+  }
+
+  /* Shop origin badge on product images */
+  .shop-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(194,65,12,0.15);
+    border-radius: 9999px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--lt-charcoal);
+    box-shadow: var(--lt-shadow-sm);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .shop-badge:hover {
+    background: rgba(255, 247, 237, 0.97);
+    border-color: rgba(194,65,12,0.35);
+  }
+  .shop-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lt-amber);
+    flex-shrink: 0;
+  }
+
+  /* Glassmorphic surfaces */
+  .glass {
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+
+  /* Animated gradient shimmer for skeletons */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--lt-cream-dark) 25%,
+      #ede9e0 50%,
+      var(--lt-cream-dark) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Fade up entrance animation */
+  .fade-up {
+    animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}

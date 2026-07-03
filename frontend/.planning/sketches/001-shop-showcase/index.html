@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch 001 - Shop Showcase & Origin Mapping</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <!-- Shared Theme CSS -->
+  <link rel="stylesheet" href="../themes/default.css">
+  
+  <style>
+    /* Styling independent of theme or override defaults */
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      margin: 0;
+      padding-top: 60px; /* space for fixed tab nav */
+      transition: all 0.3s ease;
+    }
+
+    /* Fixed Top Variant Nav */
+    #variant-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9998;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(194, 65, 12, 0.08);
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .nav-title {
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .tabs-wrapper {
+      display: flex;
+      gap: 8px;
+    }
+
+    .variant-tab {
+      background: transparent;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      color: var(--color-text-muted);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .variant-tab:hover {
+      background: rgba(194, 65, 12, 0.04);
+      color: var(--color-accent);
+      border-color: rgba(194, 65, 12, 0.2);
+    }
+
+    .variant-tab.active {
+      background: var(--color-primary);
+      color: var(--color-surface);
+      border-color: var(--color-primary);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Main Container with viewport constraints */
+    #sketch-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      transition: max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .variant {
+      display: none;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    .variant.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Grid & Card Patterns */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .bento-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(194, 65, 12, 0.25);
+    }
+
+    /* Product Grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    .product-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: relative;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .product-image-wrapper {
+      position: relative;
+      aspect-ratio: 4/5;
+      background: #f1f0ec;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.04);
+    }
+
+    /* Floating Shop Tag (Variant A) */
+    .shop-origin-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(194, 65, 12, 0.15);
+      border-radius: var(--radius-full);
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .shop-origin-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--color-accent);
+      border-radius: 50%;
+    }
+
+    /* Hover Overlay (Variant B) */
+    .shop-origin-hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s ease;
+      padding: 24px;
+    }
+
+    .product-image-wrapper:hover .shop-origin-hover-overlay {
+      opacity: 1;
+    }
+
+    .overlay-shop-details {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      width: 100%;
+      transform: translateY(15px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-image-wrapper:hover .overlay-shop-details {
+      transform: translateY(0);
+    }
+
+    /* Section Headers */
+    .section-title {
+      font-family: 'Outfit', var(--font-sans);
+      font-weight: 800;
+      font-size: var(--text-3xl);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      color: var(--color-text-muted);
+      font-size: var(--text-base);
+      margin-bottom: 32px;
+      max-width: 42rem;
+      line-height: 1.6;
+    }
+
+    /* Carousel Variant B */
+    .carousel-container {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding: 16px 4px 32px 4px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .carousel-container::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
+    }
+
+    .carousel-item {
+      flex: 0 0 420px;
+      scroll-snap-align: start;
+    }
+
+    /* Split View Variant C */
+    .split-container {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 32px;
+      height: 650px;
+      border-radius: var(--radius-lg);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .split-sidebar {
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #faf9f6;
+    }
+
+    .split-sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .split-shop-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .split-shop-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 8px;
+    }
+
+    .split-shop-item:hover {
+      background: rgba(194, 65, 12, 0.04);
+    }
+
+    .split-shop-item.active {
+      background: var(--color-primary);
+      color: var(--color-surface);
+    }
+
+    .split-shop-item.active .split-shop-name {
+      color: var(--color-surface);
+    }
+
+    .split-shop-item.active .split-shop-desc {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .split-shop-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: #f1f0ec;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: var(--color-accent);
+      border: 1px solid rgba(194, 65, 12, 0.1);
+    }
+
+    .split-shop-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--color-text);
+    }
+
+    .split-shop-desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    .split-content {
+      padding: 32px;
+      overflow-y: auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      background: white;
+    }
+
+    /* Modal / Drawer for shop details */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .drawer-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .drawer-content {
+      width: 100%;
+      max-width: 500px;
+      height: 100%;
+      background: var(--color-surface);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow-y: auto;
+    }
+
+    .drawer-overlay.active .drawer-content {
+      transform: translateX(0);
+    }
+
+    /* Buttons & Form controls */
+    .btn {
+      background: var(--color-primary);
+      color: var(--color-surface);
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+
+    .btn-outline:hover {
+      background: rgba(194, 65, 12, 0.04);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    /* Toast system */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 10001;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: toastIn 0.3s forwards;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @keyframes toastIn {
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Annotation details */
+    .annotated [data-annotated] {
+      position: relative;
+    }
+
+    .annotated [data-annotated]::after {
+      content: attr(data-annotated);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: #C2410C;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .annotated:hover [data-annotated]::after {
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Variant Switcher Nav -->
+  <div id="variant-nav">
+    <div class="nav-left">
+      <span class="nav-title">LocalThread Sketch 001</span>
+      <div class="tabs-wrapper">
+        <button class="variant-tab active" onclick="showVariant('a', this)">Variant A: Bento Discovery</button>
+        <button class="variant-tab" onclick="showVariant('b', this)">Variant B: Cinematic Carousel</button>
+        <button class="variant-tab" onclick="showVariant('c', this)">Variant C: Split-Screen Explorer</button>
+      </div>
+    </div>
+    <div class="nav-right" style="font-size: 12px; color: var(--color-text-muted); font-weight: 600;">
+      Warm Minimalist Theme
+    </div>
+  </div>
+
+  <div id="sketch-container">
+    
+    <!-- VARIANT A: Bento grid & Minimal badges -->
+    <div id="variant-a" class="variant active">
+      <div class="section-header">
+        <h2 class="section-title">Explore Neighborhood Shops</h2>
+        <p class="section-subtitle">Discover unique items directly from independent local boutiques, craft ateliers, and neighborhood design studios.</p>
+      </div>
+
+      <!-- Bento discovery cards -->
+      <div class="bento-grid">
+        <!-- Bento item 1 -->
+        <div class="bento-card" style="grid-column: span 8; height: 350px; background: linear-gradient(rgba(15,23,42,0.1), rgba(15,23,42,0.75)), url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80') center/cover;" onclick="openShopDetails('Studio Arca', 'Portland, OR', 'Known for heirloom-quality hand-carved wood products and raw, minimal brass elements.')">
+          <div style="position: absolute; bottom: 24px; left: 24px; color: white;">
+            <span style="color: #fdba74; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Featured Atelier</span>
+            <h3 style="font-size: 28px; margin: 4px 0 8px 0; font-family: 'Outfit'; font-weight: 800;">Studio Arca</h3>
+            <p style="margin: 0; font-size: 14px; opacity: 0.85; max-width: 32rem;">Specializing in heirloom wooden kitchen accessories, brass hardware, and organic joinery.</p>
+          </div>
+        </div>
+
+        <!-- Bento item 2 -->
+        <div class="bento-card" style="grid-column: span 4; height: 350px; background: #C2410C; color: white; display: flex; flex-direction: column; justify-content: space-between;" onclick="openShopDetails('Flora Threadworks', 'Austin, TX', 'A small textile collective naturally dyeing linens with botanical extract.')">
+          <div style="font-size: 20px; font-weight: 800; font-family: 'Outfit';">Botanical Dyeing</div>
+          <div>
+            <h3 style="font-size: 22px; margin: 0 0 4px 0; font-family: 'Outfit'; font-weight: 800;">Flora Threadworks</h3>
+            <p style="margin: 0; font-size: 12px; opacity: 0.9;">100% natural, local dye textiles from Austin, TX.</p>
+          </div>
+        </div>
+
+        <!-- Bento item 3 -->
+        <div class="bento-card" style="grid-column: span 4; height: 320px; background: #faf8f5; border: 1px dashed var(--color-accent); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 32px;" onclick="openShopDetails('Elena Rostova Studio', 'Seattle, WA', 'Stoneware and minimalist porcelain pottery focusing on unglazed textures.')">
+          <div style="font-size: 40px; margin-bottom: 12px;">🍯</div>
+          <h3 style="font-size: 20px; font-family: 'Outfit'; font-weight: 800; margin-bottom: 8px;">Elena Rostova Ceramics</h3>
+          <p style="margin: 0 0 16px 0; font-size: 13px; color: var(--color-text-muted);">Minimalist stoneware and raw pottery from Seattle.</p>
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-accent);">View 12 Products &rarr;</span>
+        </div>
+
+        <!-- Bento item 4 -->
+        <div class="bento-card" style="grid-column: span 8; height: 320px; background: linear-gradient(rgba(15,23,42,0.1), rgba(15,23,42,0.6)), url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80') center/cover;" onclick="openShopDetails('Smith & Co. Forge', 'Brooklyn, NY', 'Hand-forged gardening toolsets and copper home essentials.')">
+          <div style="position: absolute; bottom: 24px; left: 24px; color: white;">
+            <h3 style="font-size: 24px; margin: 0 0 4px 0; font-family: 'Outfit'; font-weight: 800;">Smith &amp; Co. Forge</h3>
+            <p style="margin: 0; font-size: 13px; opacity: 0.85;">Heirloom metalwork and copper watering kettles from Brooklyn.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 56px;">
+        <h3 class="section-title" style="font-size: 22px;">Variant A Product Origins: Floating Badge</h3>
+        <p class="section-subtitle" style="margin-bottom: 24px;">Clean badges on the top corner cleanly tell shoppers where each item is dispatched from.</p>
+        
+        <div class="product-grid">
+          <!-- Product card -->
+          <div class="product-card" onclick="triggerToast('Opened Walnut Serving Board Details')">
+            <div class="product-image-wrapper">
+              <div class="shop-origin-badge" data-annotated="radius-full">
+                <div class="shop-origin-dot"></div>
+                Studio Arca
+              </div>
+              <img src="https://images.unsplash.com/photo-1594751475765-b7785be984b2?auto=format&fit=crop&w=400&q=80" class="product-image" alt="serving board">
+            </div>
+            <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <h4 style="margin: 0; font-size: 15px; font-weight: 700;">Walnut Serving Board</h4>
+                <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--color-text-muted);">Studio Arca</p>
+              </div>
+              <span style="font-weight: 800;">$145</span>
+            </div>
+          </div>
+
+          <!-- Product card 2 -->
+          <div class="product-card" onclick="triggerToast('Opened Obsidian Tumbler Details')">
+            <div class="product-image-wrapper">
+              <div class="shop-origin-badge">
+                <div class="shop-origin-dot"></div>
+                Elena Rostova
+              </div>
+              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80" class="product-image" alt="tumbler">
+            </div>
+            <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <h4 style="margin: 0; font-size: 15px; font-weight: 700;">Obsidian Tumbler</h4>
+                <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--color-text-muted);">Elena Rostova</p>
+              </div>
+              <span style="font-weight: 800;">$65</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT B: Cinematic carousel & Hover shop details -->
+    <div id="variant-b" class="variant">
+      <div class="section-header">
+        <h2 class="section-title">Independent Boutiques</h2>
+        <p class="section-subtitle">Discover the curated collections of local stores around the country, sliding horizontally like a digital catalog.</p>
+      </div>
+
+      <div class="carousel-container">
+        <!-- Shop Card 1 -->
+        <div class="carousel-item">
+          <div class="bento-card" style="height: 480px; padding: 0; background: white;" onclick="openShopDetails('Studio Arca', 'Portland, OR', 'Specializing in handcrafted walnut boards and solid brass home goods.')">
+            <div style="height: 60%; width: 100%; background: url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80') center/cover;"></div>
+            <div style="padding: 24px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em;">Portland, OR</span>
+              <h3 style="font-size: 22px; margin: 4px 0 8px 0; font-family: 'Outfit'; font-weight: 800;">Studio Arca</h3>
+              <p style="margin: 0; font-size: 13px; color: var(--color-text-muted); line-height: 1.5;">Atelier focused on combining functional wood carving with sleek geometry.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shop Card 2 -->
+        <div class="carousel-item">
+          <div class="bento-card" style="height: 480px; padding: 0; background: white;" onclick="openShopDetails('Elena Rostova Studio', 'Seattle, WA', 'Custom stoneware, mugs, and organic porcelain creations.')">
+            <div style="height: 60%; width: 100%; background: url('https://images.unsplash.com/photo-1576016770956-debb63d900ae?auto=format&fit=crop&w=400&q=80') center/cover;"></div>
+            <div style="padding: 24px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em;">Seattle, WA</span>
+              <h3 style="font-size: 22px; margin: 4px 0 8px 0; font-family: 'Outfit'; font-weight: 800;">Elena Rostova Studio</h3>
+              <p style="margin: 0; font-size: 13px; color: var(--color-text-muted); line-height: 1.5;">Unglazed stoneware exploring texture, clay grains, and minimal design.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shop Card 3 -->
+        <div class="carousel-item">
+          <div class="bento-card" style="height: 480px; padding: 0; background: white;" onclick="openShopDetails('Flora Threadworks', 'Austin, TX', 'Naturally dyed linen, kitchen napery, and table spreads.')">
+            <div style="height: 60%; width: 100%; background: url('https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=400&q=80') center/cover;"></div>
+            <div style="padding: 24px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em;">Austin, TX</span>
+              <h3 style="font-size: 22px; margin: 4px 0 8px 0; font-family: 'Outfit'; font-weight: 800;">Flora Threadworks</h3>
+              <p style="margin: 0; font-size: 13px; color: var(--color-text-muted); line-height: 1.5;">Botanical linen dyeing collective bringing organic textures to the dinner table.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 48px;">
+        <h3 class="section-title" style="font-size: 22px;">Variant B Product Origins: Hover Detail Overlay</h3>
+        <p class="section-subtitle" style="margin-bottom: 24px;">Hovering over the product image reveals a card displaying the store's location, story, and a "Meet Vendor" trigger.</p>
+        
+        <div class="product-grid">
+          <!-- Product card -->
+          <div class="product-card">
+            <div class="product-image-wrapper">
+              <div class="shop-origin-hover-overlay">
+                <div class="overlay-shop-details">
+                  <h5 style="margin: 0 0 2px 0; font-size: 13px; font-weight: 800; color: var(--color-accent);">Studio Arca</h5>
+                  <p style="margin: 0 0 12px 0; font-size: 10px; color: var(--color-text-muted);">Portland, OR</p>
+                  <button class="btn btn-outline" style="font-size: 10px; padding: 6px 12px; width: 100%; justify-content: center;" onclick="openShopDetails('Studio Arca', 'Portland, OR', 'Atelier specializing in organic wooden kitchen goods.')">Explore Shop</button>
+                </div>
+              </div>
+              <img src="https://images.unsplash.com/photo-1594751475765-b7785be984b2?auto=format&fit=crop&w=400&q=80" class="product-image" alt="serving board">
+            </div>
+            <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <h4 style="margin: 0; font-size: 15px; font-weight: 700;">Walnut Serving Board</h4>
+                <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--color-text-muted);">Studio Arca</p>
+              </div>
+              <span style="font-weight: 800;">$145</span>
+            </div>
+          </div>
+
+          <!-- Product card 2 -->
+          <div class="product-card">
+            <div class="product-image-wrapper">
+              <div class="shop-origin-hover-overlay">
+                <div class="overlay-shop-details">
+                  <h5 style="margin: 0 0 2px 0; font-size: 13px; font-weight: 800; color: var(--color-accent);">Elena Rostova</h5>
+                  <p style="margin: 0 0 12px 0; font-size: 10px; color: var(--color-text-muted);">Seattle, WA</p>
+                  <button class="btn btn-outline" style="font-size: 10px; padding: 6px 12px; width: 100%; justify-content: center;" onclick="openShopDetails('Elena Rostova Studio', 'Seattle, WA', 'Stoneware and minimalist porcelain pottery.')">Explore Shop</button>
+                </div>
+              </div>
+              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80" class="product-image" alt="tumbler">
+            </div>
+            <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <h4 style="margin: 0; font-size: 15px; font-weight: 700;">Obsidian Tumbler</h4>
+                <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--color-text-muted);">Elena Rostova</p>
+              </div>
+              <span style="font-weight: 800;">$65</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT C: Split-screen explorer -->
+    <div id="variant-c" class="variant">
+      <div class="section-header">
+        <h2 class="section-title">The Artisan Hub</h2>
+        <p class="section-subtitle">An interactive desktop splitscreen allowing users to search shops on the left and immediately load their collections, stories, and products on the right.</p>
+      </div>
+
+      <div class="split-container">
+        <!-- Left Sidebar: Shop List -->
+        <div class="split-sidebar">
+          <div class="split-sidebar-header">
+            <input type="text" id="shop-search" placeholder="Search boutiques..." style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: 13px; font-family: var(--font-sans); outline: none;" onkeyup="filterShops(this.value)">
+          </div>
+          <div class="split-shop-list" id="split-shop-items-container">
+            <div class="split-shop-item active" onclick="loadSplitShop('Studio Arca', 'Portland, OR', 'Heirloom walnut kitchenware & fine joinery.', this)">
+              <div class="split-shop-avatar">SA</div>
+              <div>
+                <div class="split-shop-name">Studio Arca</div>
+                <div class="split-shop-desc">Portland, OR &bull; Woodwork</div>
+              </div>
+            </div>
+            <div class="split-shop-item" onclick="loadSplitShop('Elena Rostova', 'Seattle, WA', 'Stoneware & raw minimalist clay pottery.', this)">
+              <div class="split-shop-avatar">ER</div>
+              <div>
+                <div class="split-shop-name">Elena Rostova</div>
+                <div class="split-shop-desc">Seattle, WA &bull; Ceramics</div>
+              </div>
+            </div>
+            <div class="split-shop-item" onclick="loadSplitShop('Flora Threadworks', 'Austin, TX', '100% natural plant-dyed linen & home goods.', this)">
+              <div class="split-shop-avatar">FT</div>
+              <div>
+                <div class="split-shop-name">Flora Threadworks</div>
+                <div class="split-shop-desc">Austin, TX &bull; Textiles</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Content: Shop Showcase details -->
+        <div class="split-content" id="split-shop-content">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+              <span style="font-size: 11px; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em;">Woodwork &bull; Portland, OR</span>
+              <h2 style="font-size: 32px; font-family: 'Outfit'; font-weight: 800; margin: 4px 0 12px 0;" id="split-title">Studio Arca</h2>
+              <p style="margin: 0; color: var(--color-text-muted); font-size: 14px; max-width: 36rem; line-height: 1.6;" id="split-desc">Heirloom walnut kitchenware & fine joinery. Studio Arca is dedicated to organic woodcarving techniques and raw geometry. Every piece is sourced from fallen logs and finished by hand with organic beeswax.</p>
+            </div>
+            <button class="btn btn-outline" onclick="toggleFollow('Studio Arca', this)">Follow Shop</button>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-border); padding-top: 24px;">
+            <h4 style="font-family: 'Outfit'; font-weight: 700; font-size: 16px; margin: 0 0 16px 0;">Featured Products</h4>
+            <div class="product-grid" style="grid-template-columns: repeat(2, 1fr); gap: 20px;">
+              <div class="product-card">
+                <div class="product-image-wrapper" style="aspect-ratio: 1/1;">
+                  <img src="https://images.unsplash.com/photo-1594751475765-b7785be984b2?auto=format&fit=crop&w=300&q=80" class="product-image" alt="serving board">
+                </div>
+                <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                  <h5 style="margin: 0; font-size: 13px; font-weight: 700;">Walnut Serving Board</h5>
+                  <span style="font-size: 13px; font-weight: 800;">$145</span>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="product-image-wrapper" style="aspect-ratio: 1/1;">
+                  <img src="https://images.unsplash.com/photo-1530062843189-e1352e047718?auto=format&fit=crop&w=300&q=80" class="product-image" alt="spoon">
+                </div>
+                <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                  <h5 style="margin: 0; font-size: 13px; font-weight: 700;">Hand-carved Brass Spoon</h5>
+                  <span style="font-size: 13px; font-weight: 800;">$48</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Shop Detail Slide Drawer Modal -->
+  <div class="drawer-overlay" id="shop-drawer" onclick="closeShopDetails()">
+    <div class="drawer-content" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 12px; font-weight: 800; color: var(--color-accent); letter-spacing: 0.05em; text-transform: uppercase;" id="drawer-meta">Portland, OR</span>
+        <button onclick="closeShopDetails()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--color-text-muted);">&times;</button>
+      </div>
+
+      <div style="margin-top: 8px;">
+        <h2 style="font-size: 32px; font-family: 'Outfit'; font-weight: 800; margin: 0 0 12px 0;" id="drawer-title">Studio Arca</h2>
+        <p style="color: var(--color-text-muted); font-size: 14px; line-height: 1.6;" id="drawer-desc">Description loading...</p>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button class="btn" style="flex: 1; justify-content: center;" onclick="triggerToast('Entered Storefront!')">Visit Digital Storefront</button>
+        <button class="btn btn-outline" onclick="toggleFollowDrawer(this)">Follow</button>
+      </div>
+
+      <div style="border-top: 1px solid var(--color-border); padding-top: 24px; margin-top: 12px;">
+        <h3 style="font-family: 'Outfit'; font-size: 18px; font-weight: 800; margin: 0 0 16px 0;">Popular Items</h3>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="width: 60px; height: 60px; border-radius: var(--radius-md); background: #f1f0ec; overflow: hidden;">
+              <img src="https://images.unsplash.com/photo-1594751475765-b7785be984b2?auto=format&fit=crop&w=100&q=80" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0; font-size: 14px; font-weight: 700;">Walnut Serving Board</h4>
+              <span style="font-size: 12px; font-weight: 800; color: var(--color-accent);">$145</span>
+            </div>
+            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="triggerToast('Added Walnut Board to Cart!')">Add</button>
+          </div>
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="width: 60px; height: 60px; border-radius: var(--radius-md); background: #f1f0ec; overflow: hidden;">
+              <img src="https://images.unsplash.com/photo-1530062843189-e1352e047718?auto=format&fit=crop&w=100&q=80" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0; font-size: 14px; font-weight: 700;">Brass Coffee Spoon</h4>
+              <span style="font-size: 12px; font-weight: 800; color: var(--color-accent);">$48</span>
+            </div>
+            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;" onclick="triggerToast('Added Brass Spoon to Cart!')">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Hub -->
+  <div id="toast-container"></div>
+
+  <!-- Floating Sketch Tooling fixed bottom-right -->
+  <div id="sketch-tools" style="position:fixed;bottom:16px;right:16px;z-index:9999;font-family:system-ui,sans-serif;font-size:12px;background:rgba(15,23,42,0.9);color:white;padding:12px 16px;border-radius:12px;opacity:0.4;transition:opacity 0.2s;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 30px rgba(0,0,0,0.15);" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.4'">
+    <div style="font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent);">Sketch Tooling</div>
+    
+    <!-- Viewport selector -->
+    <div style="display:flex;gap:4px;">
+      <button style="flex:1;background:#334155;border:none;color:white;padding:6px;border-radius:6px;cursor:pointer;font-weight:600;" onclick="setViewport('375px')">Mobile</button>
+      <button style="flex:1;background:#334155;border:none;color:white;padding:6px;border-radius:6px;cursor:pointer;font-weight:600;" onclick="setViewport('768px')">Tablet</button>
+      <button style="flex:1;background:#334155;border:none;color:white;padding:6px;border-radius:6px;cursor:pointer;font-weight:600;" onclick="setViewport('1400px')">Desktop</button>
+    </div>
+
+    <!-- Toggle Annotation Mode -->
+    <button style="width:100%;background:#C2410C;border:none;color:white;padding:8px;border-radius:6px;cursor:pointer;font-weight:600;" onclick="toggleAnnotations()">Toggle Spacing Spec</button>
+
+    <!-- Theme Switcher dropdown -->
+    <select id="theme-switcher" style="background:#334155;color:white;border:none;padding:6px;border-radius:6px;font-size:11px;outline:none;" onchange="document.querySelector('link[href*=themes]').href='../themes/'+this.value+'.css'">
+      <option value="default">Default: Warm Minimalist</option>
+    </select>
+  </div>
+
+  <script>
+    // Tab switching between variants
+    function showVariant(id, tabElement) {
+      document.querySelectorAll('.variant').forEach(v => v.style.display = 'none');
+      document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('variant-' + id).style.display = 'block';
+      tabElement.classList.add('active');
+      triggerToast(`Switched to Variant ${id.toUpperCase()}`);
+    }
+
+    // Viewport control
+    function setViewport(width) {
+      document.getElementById('sketch-container').style.maxWidth = width;
+      triggerToast(`Preview width set to: ${width}`);
+    }
+
+    // Slide Drawer triggers
+    function openShopDetails(title, location, desc) {
+      document.getElementById('drawer-title').innerText = title;
+      document.getElementById('drawer-meta').innerText = location;
+      document.getElementById('drawer-desc').innerText = desc;
+      document.getElementById('shop-drawer').classList.add('active');
+    }
+
+    function closeShopDetails() {
+      document.getElementById('shop-drawer').classList.remove('active');
+    }
+
+    // Toast triggers
+    function triggerToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<span>✓</span> <span>${message}</span>`;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Follow toggles
+    let followedShops = {};
+    function toggleFollow(shopName, btnElement) {
+      event.stopPropagation();
+      followedShops[shopName] = !followedShops[shopName];
+      if (followedShops[shopName]) {
+        btnElement.classList.remove('btn-outline');
+        btnElement.style.background = '#10b981';
+        btnElement.style.color = 'white';
+        btnElement.innerText = 'Following';
+        triggerToast(`Following ${shopName}`);
+      } else {
+        btnElement.classList.add('btn-outline');
+        btnElement.style.background = 'transparent';
+        btnElement.style.color = 'var(--color-text)';
+        btnElement.innerText = 'Follow Shop';
+        triggerToast(`Unfollowed ${shopName}`);
+      }
+    }
+
+    function toggleFollowDrawer(btnElement) {
+      const shopName = document.getElementById('drawer-title').innerText;
+      followedShops[shopName] = !followedShops[shopName];
+      if (followedShops[shopName]) {
+        btnElement.classList.remove('btn-outline');
+        btnElement.style.background = '#10b981';
+        btnElement.style.color = 'white';
+        btnElement.innerText = 'Following';
+        triggerToast(`Following ${shopName}`);
+      } else {
+        btnElement.classList.add('btn-outline');
+        btnElement.style.background = 'transparent';
+        btnElement.style.color = 'var(--color-text)';
+        btnElement.innerText = 'Follow';
+        triggerToast(`Unfollowed ${shopName}`);
+      }
+    }
+
+    // Annotation overlay controls
+    let annotationMode = false;
+    function toggleAnnotations() {
+      annotationMode = !annotationMode;
+      document.body.classList.toggle('annotated');
+      triggerToast(`Spacing Specification overlays: ${annotationMode ? 'ON' : 'OFF'}`);
+    }
+
+    // Split screen helper
+    function loadSplitShop(title, location, desc, element) {
+      document.querySelectorAll('.split-shop-item').forEach(item => item.classList.remove('active'));
+      element.classList.add('active');
+      
+      const splitContent = document.getElementById('split-shop-content');
+      splitContent.style.opacity = '0';
+      
+      setTimeout(() => {
+        document.getElementById('split-title').innerText = title;
+        document.getElementById('split-desc').innerText = `${title} based in ${location}. ${desc} Sourcing organic raw materials and finishing by hand in our custom local studio.`;
+        splitContent.style.opacity = '1';
+        triggerToast(`Loaded ${title} collection`);
+      }, 200);
+      
+      splitContent.style.transition = 'opacity 0.2s ease';
+    }
+
+    // Filter local shop elements in Split sidebar search
+    function filterShops(query) {
+      const items = document.querySelectorAll('.split-shop-item');
+      items.forEach(item => {
+        const name = item.querySelector('.split-shop-name').innerText.toLowerCase();
+        if (name.includes(query.toLowerCase())) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

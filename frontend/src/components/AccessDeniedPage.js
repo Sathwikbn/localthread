@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AccessDeniedPage = AccessDeniedPage;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_router_dom_1 = require("react-router-dom");
+var button_1 = require("./ui/button");
+var lucide_react_1 = require("lucide-react");
+function AccessDeniedPage() {
+    var navigate = (0, react_router_dom_1.useNavigate)();
+    return ((0, jsx_runtime_1.jsx)("div", { className: "min-h-screen bg-background flex items-center justify-center px-4", children: (0, jsx_runtime_1.jsxs)("div", { className: "max-w-md w-full text-center", children: [(0, jsx_runtime_1.jsx)("div", { className: "mx-auto w-24 h-24 bg-destructive/10 rounded-full flex items-center justify-center mb-6", children: (0, jsx_runtime_1.jsx)(lucide_react_1.Shield, { className: "w-12 h-12 text-destructive" }) }), (0, jsx_runtime_1.jsx)("h1", { className: "text-3xl font-bold text-foreground mb-4", children: "Access Denied" }), (0, jsx_runtime_1.jsx)("p", { className: "text-muted-foreground text-lg mb-8", children: "Sorry, you don't have permission to access this page. Please contact your administrator if you believe this is an error." }), (0, jsx_runtime_1.jsx)("div", { className: "bg-muted rounded-lg p-4 mb-8", children: (0, jsx_runtime_1.jsx)("p", { className: "text-sm text-muted-foreground", children: "Error Code: 403 Forbidden" }) }), (0, jsx_runtime_1.jsxs)("div", { className: "flex flex-col sm:flex-row gap-4 justify-center", children: [(0, jsx_runtime_1.jsxs)(button_1.Button, { variant: "outline", onClick: function () { return navigate(-1); }, className: "flex items-center gap-2", children: [(0, jsx_runtime_1.jsx)(lucide_react_1.ArrowLeft, { className: "w-4 h-4" }), "Go Back"] }), (0, jsx_runtime_1.jsxs)(button_1.Button, { onClick: function () { return navigate('/'); }, className: "flex items-center gap-2", children: [(0, jsx_runtime_1.jsx)(lucide_react_1.Home, { className: "w-4 h-4" }), "Go Home"] })] }), (0, jsx_runtime_1.jsx)("div", { className: "mt-8 pt-6 border-t", children: (0, jsx_runtime_1.jsxs)("p", { className: "text-sm text-muted-foreground", children: ["Need help? Contact support at", ' ', (0, jsx_runtime_1.jsx)("a", { href: "mailto:support@localthread.com", className: "text-primary hover:underline", children: "support@localthread.com" })] }) })] }) }));
+}

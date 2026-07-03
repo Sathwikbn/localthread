@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analyzer</title>
+</head>
+<body>
+    <div id="output">Analyzing...</div>
+    <script>
+        fetch('src/components/CheckoutPage.js')
+            .then(res => res.text())
+            .then(text => {
+                const lines = text.split('\n');
+                const line = lines[206]; // line 207
+                let result = "Line 207 details:<br>";
+                result += "Length: " + line.length + "<br>";
+                
+                // Find all instances of '\\u'
+                let idx = -1;
+                while ((idx = line.indexOf('\\u', idx + 1)) !== -1) {
+                    result += `Found \\u at index ${idx}: ${line.substring(idx, idx + 10)}<br>`;
+                }
+                
+                // Let's print around character 11338
+                const charCodeAtErr = line.substring(11300, 11400);
+                result += `Around 11338: ${charCodeAtErr}<br>`;
+                
+                // Let's also look for general \u or any other slashes
+                document.getElementById('output').innerHTML = result;
+            })
+            .catch(err => {
+                document.getElementById('output').innerHTML = "Error: " + err.message;
+            });
+    </script>
+</body>
+</html>
