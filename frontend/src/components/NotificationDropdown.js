@@ -75,11 +75,11 @@ function NotificationDropdown() {
                 variant: "ghost",
                 size: "icon",
                 onClick: function () { setIsOpen(!isOpen); },
-                className: "relative bg-white/60 hover:bg-amber-50/70 text-slate-700 border border-amber-200/20 backdrop-blur-sm transition-all duration-500 rounded-xl hover:text-amber-700 hover:border-amber-300/40 shadow-sm",
+                className: "relative bg-white/60 dark:bg-slate-800/60 hover:bg-amber-50/70 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 border border-amber-200/20 dark:border-slate-600/30 backdrop-blur-sm transition-all duration-500 rounded-xl hover:text-amber-700 dark:hover:text-amber-400 hover:border-amber-300/40 shadow-sm",
                 children: [
                     (0, jsx_runtime_1.jsx)(lucide_react_1.Bell, { className: "h-5 w-5" }),
                     unreadCount > 0 && (0, jsx_runtime_1.jsx)(badge_1.Badge, {
-                        className: "absolute -top-2 -right-2 h-5.5 w-5.5 rounded-full p-0 flex items-center justify-center text-[10px] font-black bg-[var(--lt-amber)] text-white border-2 border-white shadow-md animate-pulse",
+                        className: "absolute -top-2 -right-2 h-5.5 w-5.5 rounded-full p-0 flex items-center justify-center text-[10px] font-black bg-[var(--lt-amber)] text-white border-2 border-background shadow-md animate-pulse",
                         children: unreadCount
                     })
                 ]
@@ -87,7 +87,7 @@ function NotificationDropdown() {
 
             // Dropdown List
             isOpen && (0, jsx_runtime_1.jsxs)("div", {
-                className: "absolute right-0 mt-3 w-80 sm:w-96 bg-white/95 backdrop-blur-2xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-white/40 py-3 z-50 animate-slide-up-menu",
+                className: "absolute right-0 mt-3 w-80 sm:w-96 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-white/40 dark:border-slate-700/50 py-3 z-50 animate-slide-up-menu",
                 children: [
                     // Header
                     (0, jsx_runtime_1.jsxs)("div", {
@@ -107,7 +107,7 @@ function NotificationDropdown() {
 
                     // Items List
                     (0, jsx_runtime_1.jsx)("div", {
-                        className: "max-h-[360px] overflow-y-auto divide-y divide-slate-100",
+                        className: "max-h-[360px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700",
                         children: notifications.length === 0 ? (
                             (0, jsx_runtime_1.jsxs)("div", {
                                 className: "p-8 text-center text-[var(--lt-muted)]",
@@ -121,7 +121,7 @@ function NotificationDropdown() {
                                 var isUnread = !n.isRead && !n.read;
                                 return (0, jsx_runtime_1.jsxs)("div", {
                                     onClick: function () { handleNotificationClick(n); },
-                                    className: "p-4 cursor-pointer hover:bg-amber-50/30 transition-colors flex gap-3 items-start " + (isUnread ? 'bg-amber-50/10' : ''),
+                                    className: "p-4 cursor-pointer hover:bg-amber-50/30 dark:hover:bg-amber-900/10 transition-colors flex gap-3 items-start " + (isUnread ? 'bg-amber-50/10 dark:bg-amber-900/10' : ''),
                                     children: [
                                         // Unread dot indicator
                                         isUnread && (0, jsx_runtime_1.jsx)("div", {

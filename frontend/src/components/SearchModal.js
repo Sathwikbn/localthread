@@ -88,7 +88,7 @@ function SearchModal(_a) {
         className: "fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md flex items-start justify-center pt-20 px-4",
         children: (0, jsx_runtime_1.jsxs)("div", {
             ref: modalRef,
-            className: "w-full max-w-xl bg-white/95 backdrop-blur-2xl rounded-3xl border border-white/40 shadow-[0_32px_64px_rgba(0,0,0,0.16)] py-6 px-6 overflow-hidden animate-slide-up-menu",
+            className: "w-full max-w-xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl border border-white/40 dark:border-slate-700/50 shadow-[0_32px_64px_rgba(0,0,0,0.24)] py-6 px-6 overflow-hidden animate-slide-up-menu",
             children: [
                 // Input box
                 (0, jsx_runtime_1.jsxs)("div", {
@@ -105,7 +105,7 @@ function SearchModal(_a) {
                         }),
                         (0, jsx_runtime_1.jsx)("button", {
                             onClick: onClose,
-                            className: "p-1.5 hover:bg-slate-100 rounded-xl transition-colors shrink-0",
+                            className: "p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors shrink-0",
                             children: (0, jsx_runtime_1.jsx)(lucide_react_1.X, { size: 18, className: "text-[var(--lt-muted)]" })
                         })
                     ]
